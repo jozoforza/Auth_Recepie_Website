@@ -1,0 +1,17 @@
+.main_block{
+    width: fit-content;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+.search_title{
+    width: fit-content;
+    margin: 10px;
+    margin-top: 30px;
+    font-size: 30px;
+}
+.whole_thing{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

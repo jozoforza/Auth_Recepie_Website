@@ -1,0 +1,18 @@
+.top_bar{
+    width: 100%;
+    background-color: orange;
+    display: flex;
+    justify-content:space-between;
+   align-items: center;
+}
+.left_bar{
+    background-color: orange;
+    height: 100px;
+    width: fit-content;
+    display: flex;
+    align-items: center; 
+}
+.search_bar{
+    margin: 20px;
+
+}

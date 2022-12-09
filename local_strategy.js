@@ -1,7 +1,6 @@
 const LocalStrategy = require("passport-local").Strategy;
-const {dbAddUser, findUserByEmail} = require('./db')
+const {findUserByEmail, createUser} = require('./db')
 const passport = require('passport');
-const { request } = require("express");
 
 const strategy = new LocalStrategy(
     {
@@ -38,4 +37,20 @@ function passportMiddle(req, res, next){
     })(req, res, next);
 }
 
-module.exports = {strategy, passportMiddle}
+function signUpMiddle(req, res, next){
+      findUserByEmail(req.body.email).then(email => {
+        if(email){
+          res.send("user already exists")
+          res.end()
+        }else{
+          createUser(req.body.email, req.body.password).then(
+            success => {
+              next()
+            }
+          ).catch(err=> console.log(err))
+                
+        }
+})           
+}
+
+module.exports = {strategy, passportMiddle, signUpMiddle}

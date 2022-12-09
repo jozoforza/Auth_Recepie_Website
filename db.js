@@ -1,53 +1,64 @@
-const mysql = require('mysql');
-require('dotenv').config()
 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: process.env.DB_USER,
-    password:  process.env.DB_PASSWORD,
-    database: 'EATHUB'
-});
+const sqlite3 = require('sqlite3').verbose();
 
-    function dbAddUser(userObject){
-      return new Promise(function(resolve, reject){
-        connection.query(
-          `INSERT INTO users(email,password) 
-          VALUES('${userObject.email}','${userObject.password}')`, 
-            function(err, results, fields){                                                
-                if(err){
-                    reject(new Error(err));
-                }else{
-                    resolve(results);
-                }
+let db = new sqlite3.Database("./data/users.db", (err) => {
+    if(err)
+    {
+    console.log("Error Occurred - " + err.message);
+    }else{
+        console.log('sqlite connected')
+    }
+})
+
+
+const selectQuery = 'SELECT * FROM users;'
+function dbAll(){
+    return new Promise((resolve, reject) => {
+        db.all(selectQuery , (err , data) => {
+            if(err){
+                reject(new Error(err))      
+            }else{
+                resolve(data)
             }
-        )}
-    )}
-    function findUserByEmail(value){
-      return new Promise(function(resolve, reject){
-        connection.query(
-          `SELECT * FROM users WHERE email=${mysql.escape(value)}`, 
-            function(err, results, fields){                                                
-                if(err){
-                    reject(new Error(err));
-                }else{
-                    resolve(results[0]);
-                }
-            }
-        )}
-    )}
-    function findUserById(id){
-      return new Promise(function(resolve, reject){
-        connection.query(
-          `SELECT * FROM users WHERE id=${mysql.escape(id)}`, 
-            function(err, results, fields){                                                
-                if(err){
-                    reject(new Error(err));
-                }else{
-                    resolve(results[0]);
-                }
-            }
-        )}
-    )}
+            });
+    })
+}
 
+const findByIdQuery = 'SELECT * FROM users WHERE id=?;'
+function findUserById(id){
+    return new Promise((resolve, reject) => {
+        db.all(findByIdQuery ,[id], (err , data) => {
+            if(err){
+                reject(new Error(err))      
+            }else{
+                resolve(data[0])
+            }
+            });
+    })
+}
 
-module.exports = {dbAddUser, findUserByEmail, findUserById, connection}
+const findByEmailQuery = 'SELECT * FROM users WHERE email=?;'
+function findUserByEmail(email){
+    return new Promise((resolve, reject) => {
+        db.all(findByEmailQuery ,[email], (err , data) => {
+            if(err){
+                reject(new Error(err))      
+            }else{
+                resolve(data[0])
+            }
+            });
+    })
+}
+const createUserQuery = `INSERT INTO users(email, password) VALUES(?,?)`
+function createUser(email, password){
+    return new Promise((resolve, reject) => {
+        db.run(createUserQuery ,[email, password], (err , data) => {
+            if(err){
+                reject(new Error(err))      
+            }else{
+                resolve()
+            }
+            });
+    })
+}
+module.exports = {createUser, findUserByEmail, findUserById,dbAll}

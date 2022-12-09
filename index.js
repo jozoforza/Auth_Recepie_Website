@@ -2,10 +2,12 @@ const express = require('express');
 var cors = require('cors')
 const session = require('express-session')
 const passport = require('passport')
-const {strategy, passportMiddle} = require('./local_strategy')
+const {strategy, passportMiddle, signUpMiddle} = require('./local_strategy')
 const app = express();
-const {dbAddUser, findUserByEmail, findUserById} = require('./db')
+const {findUserByEmail, findUserById, dbAll, createUser} = require('./db')
 const {sessionConf} = require('./session_config')
+const bodyParser = require('body-parser');
+
 
 
 //passportjs
@@ -31,24 +33,33 @@ passport.deserializeUser((id, done) => {
 app.use(cors())
 app.options('*', cors());
 app.use(session(sessionConf));
-app.use(express.json())
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-findUserByEmail('kata').then(s => console.log(s))
 //routes
 app.get('/', function(req, res) {
   console.log('hit home page')
   res.send('home');
 });
 app.get('/auth',isLoggedIn, function(req, res) {
-  res.send('hello tu kelo');
+  res.json({message: 'you are authorized'});
 });
-app.post('/user', function(req, res) {
-  console.log('hit home user')
+app.post('/signUp',signUpMiddle,passportMiddle, function(req, res) {
+  console.log('hit sign up page')
   console.log(req.body)
-  res.send(`email: ${req.body.email}\npassword: ${req.body.password}`);
+  res.redirect('/auth');
+});
+
+app.post('/logout', function(req, res){
+  req.logout(function(err) {
+    if (err) { 
+      console.log(err)
+      return next(err); }
+    
+    res.redirect('/');
+  });
 });
 
 app.post('/login',passportMiddle,

@@ -9,16 +9,11 @@ import {
   selectUser
 } from '../redux/slicerReducers'
 
-const LogIn = () => {
-    //redux
-    const user = useSelector(selectUser)
-    const dispatch = useDispatch()
-    //navigation
-    const navigate = useNavigate()
-    //form info
-    const [inputs, setInputs ] = useState({})
-    //err message
+const SignUp = () => {
     const [message, setMessage] = useState('')
+    const [inputs, setInputs ] = useState({})
+    const navigate = useNavigate
+    //err message
     //form managment
     const handleChange = (event) => {
         const name = event.target.name;
@@ -29,23 +24,22 @@ const LogIn = () => {
       const handleSubmit = async(event) => {
         event.preventDefault();
         try{
-          const response = await axios.post('http://localhost:4000/login', inputs)
+          const response = await axios.post('http://localhost:4000/signUp', inputs)
           setMessage(response.data.message)
           if(response.data.password){
             navigate('/profile')
-            dispatch(fetchUser(response.data))
-            console.log(user)
+            console.log(response.data)
           }
         }catch(err){
           console.error(err);
         }
         setInputs({})
       }
+
   return (
     <div>
-        
         <form onSubmit={handleSubmit}>
-        <h2>Log In Page</h2>
+        <h2>Sign Up Page</h2>
         <p>email:</p>
 
         <input 
@@ -61,15 +55,14 @@ const LogIn = () => {
         name="password" 
         value={inputs.password || ""} 
         onChange={handleChange}/>
-        <p>{message}</p>
         <div>
         <input type="submit" value="LogIN" />
         </div>
         </form>
         <p>dont have account?</p>
-        <button onClick={()=> navigate('/signUp')}>signUp</button>
+        <button>signUp</button>
     </div>
   )
 }
 
-export default LogIn
+export default SignUp

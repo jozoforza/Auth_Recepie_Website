@@ -16,6 +16,9 @@ const Profile = () => {
       <button onClick={handleProfile}>
         Sign in
       </button>
+      <button onClick={()=> navigate('/profile')}>
+        profile
+      </button>
     </div>
   )
 }

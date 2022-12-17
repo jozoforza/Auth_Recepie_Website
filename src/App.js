@@ -20,22 +20,20 @@ import {
 
 
 function App() {
-  const ax = axios.create({
-    withCredentials: true
-});
   const user = useSelector(selectUser)
   const dispatch = useDispatch()
-  /* async function getUserInfo(){
+  async function getUserInfo(){
     try{
-      const response = await ax.get('http://localhost:4000/getProfileInfo')
+      const response = await axios.get('http://localhost:4000/getProfileInfo')
+      if(response.data.email){
       dispatch(fetchUser(response.data))
-      console.log(response.data)
+    }
     }catch(err){
       console.log(err)
     }
     
   }
-  //useEffect(()=>{getUserInfo()},[]) */
+  useEffect(()=>{getUserInfo()},[]) 
 
   return (
     <div className="App">

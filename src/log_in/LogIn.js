@@ -43,7 +43,7 @@ const LogIn = () => {
       }
   return (
     <div>
-        
+        <button onClick={()=> navigate('/')}>back</button>
         <form onSubmit={handleSubmit}>
         <h2>Log In Page</h2>
         <p>email:</p>

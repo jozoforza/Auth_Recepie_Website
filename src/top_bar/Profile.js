@@ -1,7 +1,15 @@
 import React from 'react'
 import {useNavigate} from 'react-router-dom';
 
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  fetchUser,
+  selectUser
+} from '../redux/slicerReducers'
+
+
 const Profile = () => {
+  const user = useSelector(selectUser)
   const navigate=useNavigate()
   const isAuthentificated = false
   
@@ -16,9 +24,10 @@ const Profile = () => {
       <button onClick={handleProfile}>
         Sign in
       </button>
-      <button onClick={()=> navigate('/profile')}>
-        profile
-      </button>
+      {user?(<button onClick={()=> navigate('/profile')}>
+        {user}
+      </button>):(<p></p>)}
+     
     </div>
   )
 }

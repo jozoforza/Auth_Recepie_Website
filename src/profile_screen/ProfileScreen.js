@@ -1,4 +1,5 @@
 import React from 'react'
+import {useNavigate} from 'react-router-dom';
 import './mainProfileScreen.css'
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -8,9 +9,11 @@ import {
 
 const ProfileScreen = () => {
   const user = useSelector(selectUser)
+  const navigate = useNavigate()
 
   return (
     <div>
+      <button onClick={()=> navigate('/')}>back</button>
     {(user.password)?(
     <div>
       ProfileScreen

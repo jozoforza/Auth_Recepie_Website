@@ -2,29 +2,23 @@ const express = require('express');
 var cors = require('cors')
 const session = require('express-session')
 const passport = require('passport')
-const {strategy, passportMiddle, signUpMiddle} = require('./local_strategy')
+const {strategy, passportMiddle, signUpMiddle, isLoggedIn} = require('./local_strategy')
 const app = express();
-const {findUserByEmail, findUserById, dbAll, createUser} = require('./db')
+const { dbAll, createUser, dbFind, insertRecipe} = require('./db')
 const {sessionConf} = require('./session_config')
 const bodyParser = require('body-parser');
-
-
-
-//passportjs
-function isLoggedIn(request, response, done) {   if (request.user) {
-  return done();
-}
-return response.redirect("/")
-}
+const path = require('path');
+//routes
+const user = require('./routes/user')
 
 passport.use(strategy)
 passport.serializeUser((user, done) => {
   console.log("serializing user")
-  done(null, user.id);
+  done(null, user.user_id);
 });
 passport.deserializeUser((id, done) => {
   console.log("deserializing user")
-  findUserById(id)
+  dbFind('users', 'user_id', id)
   .then(user => done(null, user))
   .catch(err => console.log(err))
 });
@@ -37,42 +31,21 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.static(path.join(__dirname, 'build')));
+app.use('/',user)
 
 //routes
 app.get('/', function(req, res) {
-  console.log('hit home page')
-  res.send('home');
+  res.render(path.join(__dirname, 'build', 'index.html'));
 });
-app.get('/auth',isLoggedIn, function(req, res) {
-  res.json({message: 'you are authorized'});
+app.get('/data/recipes_pics/:filename', (req, res) => {
+  res.sendFile(__dirname + '/data/recipes_pics/' + req.params.filename);
 });
-app.post('/signUp',signUpMiddle,passportMiddle, function(req, res) {
-  console.log('hit sign up page')
-  console.log(req.body)
-  res.redirect('/auth');
-});
+app.get('/Recepie/:id',(req,res)=>{
+  id = req.params.id
+  dbFind(recipes,recipe_id,id)
+})
 
-app.post('/logout', function(req, res){
-  req.logout(function(err) {
-    if (err) { 
-      console.log(err)
-      return next(err); }
-    
-    res.redirect('/');
-  });
-});
-
-app.post('/login',passportMiddle,
-  function(req, res) {
-    console.log("final callback")
-    try{
-      console.log(req.user)
-      res.json(req.user);
-    }catch(err){
-      console.log(err)
-    }
-  }
-);
 
 app.listen(4000, () => {
     console.log('Listening on localhost:4000')

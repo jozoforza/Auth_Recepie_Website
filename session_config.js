@@ -4,7 +4,7 @@ var session = require('express-session');
 const Store = require('express-sqlite3')(session);
 
 const storeOptions = {
-  db: './data/users.db', // Use SQLite3 in memory db.
+  db: './data/main.db', // Use SQLite3 in memory db.
   concurentDb: true, // Enable SQLite3 WAL.
 };
 

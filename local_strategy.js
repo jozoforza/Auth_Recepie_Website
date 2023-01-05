@@ -17,10 +17,12 @@ const strategy = new LocalStrategy(
     async function(username, password, done) {
       try{
         const results = await dbFind("users", "username", username)
-        const isMatch = await bcrypt.compare(password, results.password);
+        console.log(results)
         if (!results){
             return done(null, false, { message: "User does not exist" });
-        }if (!isMatch){
+        }
+        const isMatch = await bcrypt.compare(password, results.password);
+        if (!isMatch){
             return done(null, false, { message: "Password is not valid." });
         }
         console.log("found and verified user")

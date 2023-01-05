@@ -30,6 +30,7 @@ req.logout(function(err) {
 
 router.post('/login',passportMiddle,
 function(req, res) {
+    console.log(req.body)
     try{
     console.log(req.user)
     res.json(req.user);

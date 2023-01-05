@@ -12,10 +12,10 @@ let db = new sqlite3.Database("./data/main.db", (err) => {
 const recipeQuerry = `INSERT INTO 
 recipes (recipe_id,user_id, name, photo, info, recipe, date, likes, dislikes, ingredients)
  VALUES(?,?,?,?,?,?,DATE(?),?,?,?)`
-function insertRecipe(){
-    id = parseInt(uuid(),16)
+function insertRecipe(recipe){
     return new Promise((resolve, reject) => {
-        db.run(recipeQuerry ,[id,1, "hamburger", "/data/recipes_pics/adam.jpg", "eazy peazy hamburger recipe", JSON.stringify(["get ingredients", "roast meat", "serve with mayo"]),"2022-12-25",20,12,JSON.stringify(["tomato 200mg", "bread 300mg", "meat 300mg"]) ], (err , data) => {
+        const id = parseInt(uuid(),16)
+        db.run(recipeQuerry ,[id,recipe.user_id, recipe.name, recipe.photo, recipe.info, JSON.stringify(recipe.recipe),recipe.date,recipe.likes,recipe.dislikes,JSON.stringify(recipe.ingredients) ], (err , data) => {
             if(err){
                 reject(new Error(err))      
             }else{
@@ -24,9 +24,9 @@ function insertRecipe(){
             });
     })
 } 
-
-const selectQuery = 'SELECT * FROM users;'
-function dbAll(){
+//
+const selectQuery = 'SELECT * FROM recipes;'
+function dbRecipes(){
     return new Promise((resolve, reject) => {
         db.all(selectQuery , (err , data) => {
             if(err){
@@ -92,4 +92,4 @@ function dbFind(table,column, value){
     })
 }
 
-module.exports = {dbAll, dbFind, dbCreateUser,insertRecipe }
+module.exports = { dbRecipes, dbFind, dbCreateUser,insertRecipe }

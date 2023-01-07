@@ -25,8 +25,8 @@ const recipe = require('./routes/recipe')
    */
 
 const recObject = {
-  user_id: 1,
-  name: "salad",
+  user_id: 2,
+  name: "home made juice",
   photo: "/data/recipes_pics/adam.jpg",
   info: "juicy hamburger",
   recipe: ["get bread","add meat","serve with mayo"],
@@ -35,7 +35,7 @@ const recObject = {
   dislikes: 30,
   ingredients: ["bread 100g", "mayo 200g", "human flesh 600g"]
 }
-
+/* insertRecipe(recObject).then(()=>{console.log('done')}) */
 passport.use(strategy)
 passport.serializeUser((user, done) => {
   console.log("serializing user")

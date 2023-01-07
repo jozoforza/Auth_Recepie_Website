@@ -9,6 +9,7 @@ let db = new sqlite3.Database("./data/main.db", (err) => {
         console.log('sqlite connected')
     }
 })
+
 const recipeQuerry = `INSERT INTO 
 recipes (recipe_id,user_id, name, photo, info, recipe, date, likes, dislikes, ingredients)
  VALUES(?,?,?,?,?,?,DATE(?),?,?,?)`
@@ -24,7 +25,7 @@ function insertRecipe(recipe){
             });
     })
 } 
-//
+
 const selectQuery = 'SELECT * FROM recipes;'
 function dbRecipes(){
     return new Promise((resolve, reject) => {
@@ -37,30 +38,16 @@ function dbRecipes(){
             });
     })
 }
-
-const findByIdQuery = 'SELECT * FROM users WHERE user_id=?;'
-function findUserById(id){
+const myRecipesQuerry = `select * from recipes where user_id=?`
+function dbMyRecipes(user_id){
     return new Promise((resolve, reject) => {
-        db.all(findByIdQuery ,[id], (err , data) => {
+        db.all(myRecipesQuerry, [user_id], (err,data)=>{
             if(err){
-                reject(new Error(err))      
+                reject(new Error(err))
             }else{
-                resolve(data[0])
+                resolve(data)
             }
-            });
-    })
-}
-
-const findByEmailQuery = 'SELECT * FROM users WHERE email=?;'
-function findUserByEmail(email){
-    return new Promise((resolve, reject) => {
-        db.all(findByEmailQuery ,[email], (err , data) => {
-            if(err){
-                reject(new Error(err))      
-            }else{
-                resolve(data[0])
-            }
-            });
+        })
     })
 }
 
@@ -81,7 +68,7 @@ function dbCreateUser(data){
 
 function dbFind(table,column, value){
     return new Promise((resolve, reject) => {
-        const findQuerry = `SELECT * FROM ${table} WHERE ${column}=?`
+        const findQuerry = `SELECT * FROM ${table} WHERE ${column}=? LIMIT 1;`
         db.all(findQuerry ,[value], (err , data) => {
             if(err){
                 reject(new Error(err))      
@@ -92,4 +79,4 @@ function dbFind(table,column, value){
     })
 }
 
-module.exports = { dbRecipes, dbFind, dbCreateUser,insertRecipe }
+module.exports = { dbRecipes, dbFind, dbCreateUser,insertRecipe, dbMyRecipes }

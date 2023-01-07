@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const path = require('path')
-const {dbFind, dbRecipes} = require('../db')
+const {dbFind, dbRecipes, dbMyRecipes} = require('../db');
+const { isLoggedIn } = require('../local_strategy');
 
 router.get('/data/recipes_pics/:filename', (req, res) => {
     res.sendFile(process.env.PWD + '/data/recipes_pics/' + req.params.filename);
@@ -17,6 +18,17 @@ router.get('/recipes', (req, res) => {
         res.json(data)
     })
   });
+router.get('/myRecipes',(req,res)=>{
+  if(req.user){
+    const myId = req.user.user_id
+    dbMyRecipes(myId).then((data)=>{
+      res.json(data)
+    })
+  }else{
+    res.json({message: "bruh"})
+  }
+    
+})
 
 
 module.exports = router

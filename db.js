@@ -16,7 +16,7 @@ recipes (recipe_id,user_id, name, photo, info, recipe, date, likes, dislikes, in
 function insertRecipe(recipe){
     return new Promise((resolve, reject) => {
         const id = parseInt(uuid(),16)
-        db.run(recipeQuerry ,[id,recipe.user_id, recipe.name, recipe.photo, recipe.info, JSON.stringify(recipe.recipe),recipe.date,recipe.likes,recipe.dislikes,JSON.stringify(recipe.ingredients) ], (err , data) => {
+        db.run(recipeQuerry ,[recipe.id,recipe.user_id, recipe.name, recipe.photo, recipe.info, JSON.stringify(recipe.recipe),recipe.date,recipe.likes,recipe.dislikes,JSON.stringify(recipe.ingredients) ], (err , data) => {
             if(err){
                 reject(new Error(err))      
             }else{

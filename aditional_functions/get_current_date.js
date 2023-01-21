@@ -3,7 +3,7 @@ function date(){
 
     const year = currentDate.getFullYear();
 
-    let month = currentDate.getMonth() + 1;  // getMonth() returns a value from 0 to 11, so we need to add 1
+    let month = currentDate.getMonth() + 1;
     if (month < 10) {
     month = `0${month}`;
     }

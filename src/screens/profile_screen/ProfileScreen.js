@@ -5,7 +5,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import {
   fetchUser,
   selectUser
-} from '../redux/slicerReducers'
+} from '../../redux/slicerReducers'
+import MyRecepies from './MyRecepies';
+
 
 const ProfileScreen = () => {
   const user = useSelector(selectUser)
@@ -16,9 +18,15 @@ const ProfileScreen = () => {
       <button onClick={()=> navigate('/')}>back</button>
     {(user.password)?(
     <div>
-      ProfileScreen
+      <h1>ProfileScreen</h1>
       <div>email: {user.email}</div>
-    </div>):(<div>not authentificated</div>)}
+      <div>username: {user.username}</div>
+      <div>bio: {user.bio}</div>
+      <button onClick={()=>{navigate('/create')}}>CREATE RECIPE</button>
+      <MyRecepies/>
+    </div>)
+    :(<div>not authentificated</div>)}
+      
     </div>
   )
 }

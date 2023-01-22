@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import {
   fetchUser,
   selectUser
-} from '../redux/slicerReducers'
+} from '../../redux/slicerReducers'
 
 const SignUp = () => {
   const user = useSelector(selectUser)

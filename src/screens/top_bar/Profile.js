@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import {
   fetchUser,
   selectUser
-} from '../redux/slicerReducers'
+} from '../../redux/slicerReducers'
 
 
 const Profile = () => {
@@ -24,8 +24,8 @@ const Profile = () => {
       <button onClick={handleProfile}>
         Sign in
       </button>
-      {user?(<button onClick={()=> navigate('/profile')}>
-        {user}
+      {user.username?(<button onClick={()=> navigate('/profile')}>
+        {user.username}
       </button>):(<p></p>)}
      
     </div>

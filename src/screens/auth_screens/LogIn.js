@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import {
   fetchUser,
   selectUser
-} from '../redux/slicerReducers'
+} from '../../redux/slicerReducers'
 
 const LogIn = () => {
     //redux
@@ -46,12 +46,12 @@ const LogIn = () => {
         <button onClick={()=> navigate('/')}>back</button>
         <form onSubmit={handleSubmit}>
         <h2>Log In Page</h2>
-        <p>email:</p>
+        <p>username:</p>
 
         <input 
         type="text" 
-        name="email" 
-        value={inputs.email || ""} 
+        name="username" 
+        value={inputs.username || ""} 
         onChange={handleChange}/>
 
         <p>password:</p>

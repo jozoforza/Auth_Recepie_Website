@@ -16,7 +16,7 @@ const ProfileScreen = () => {
   return (
     <div>
       <button onClick={()=> navigate('/')}>back</button>
-    {(user.password)?(
+    {(user && user.password)?(
     <div>
       <h1>ProfileScreen</h1>
       <div>email: {user.email}</div>

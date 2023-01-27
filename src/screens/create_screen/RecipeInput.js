@@ -3,7 +3,6 @@ import { useState } from 'react'
 import './css/recipe_input.css'
 
 const RecipeInput = ({inputArray, setInputArray}) => {
-    console.log(inputArray)
     const handleStepChange = (event) => {
         let array = inputArray
         array[event.target.name] = event.target.value
@@ -18,7 +17,6 @@ const RecipeInput = ({inputArray, setInputArray}) => {
             const count = inputArray.length - 1
             setInputArray(inputArray.filter((step,index)=>index!==count))
         }
-        console.log("array: ",inputArray)
     } 
   return (
     <div style={{backGround: "red"}}>

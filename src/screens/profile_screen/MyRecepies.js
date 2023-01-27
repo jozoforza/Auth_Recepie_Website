@@ -20,16 +20,24 @@ const MyRecepies = () => {
       
     }
     useEffect(()=>{getRecipes()},[]) 
-  return (
-    <div className='recepies'>{myRecipes.map((recipe)=>
-        <div style={{borderStyle: "solid", margin: "1rem"}} key={recipe.recipe_id+"_key"}>
-          <h1>{recipe.name}</h1>
-          <p>{recipe.info}</p>
-          <p>{recipe.date}</p>
-          <div><img src={'http://localhost:4000' + recipe.photo}></img></div>
-          <button onClick={()=>{navigate('/recipe/'+recipe.recipe_id)}}><h1>See recipe</h1></button>
-        </div>)}</div>
-  )
+  if (myRecipes.length === 0){
+    return(
+      <div>
+        <p>No recipes</p>
+      </div>
+    )
+  }else{
+    return (
+      <div className='recepies'>{myRecipes.map((recipe)=>
+          <div style={{borderStyle: "solid", margin: "1rem"}} key={recipe.recipe_id+"_key"}>
+            <h1>{recipe.name}</h1>
+            <p>{recipe.info}</p>
+            <p>{recipe.date}</p>
+            <div><img src={'http://localhost:4000' + recipe.photo}></img></div>
+            <button onClick={()=>{navigate('/recipe/'+recipe.recipe_id)}}><h1>See recipe</h1></button>
+          </div>)}</div>
+    )
+    }
 }
 
 export default MyRecepies

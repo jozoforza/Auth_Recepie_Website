@@ -6,9 +6,12 @@ import {
   fetchUser,
   selectUser
 } from '../../redux/slicerReducers'
+import axios from 'axios'
+
 
 
 const Profile = () => {
+  const dispatch = useDispatch()
   const user = useSelector(selectUser)
   const navigate=useNavigate()
   const isAuthentificated = false
@@ -19,14 +22,28 @@ const Profile = () => {
     }else{
     navigate('/profile')
   }}
+  const handleSignOut = async() =>{
+   const response = await axios.post('http://localhost:4000/logout')
+   console.log(response.data.message)
+   dispatch(fetchUser(null))
+   navigate('/')
+  }
   return (
     <div>
       <button onClick={handleProfile}>
         Sign in
       </button>
-      {user.username?(<button onClick={()=> navigate('/profile')}>
-        {user.username}
-      </button>):(<p></p>)}
+      
+      {user && user.username?(
+        <div>
+          <button onClick={()=> navigate('/profile')}>
+            {user.username}
+          </button>
+          <button onClick={()=> handleSignOut()}>
+          sign out
+          </button>
+        </div>
+      ):(<p></p>)}
      
     </div>
   )

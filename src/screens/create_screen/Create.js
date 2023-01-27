@@ -41,8 +41,8 @@ const Create = () => {
       Object.keys(inputs).forEach(key=>{
         data.append(key, inputs[key])
       })
-      data.append('recipe', recipeArray)
-      data.append('ingredients', ingredients)
+      data.append('recipe', JSON.stringify(recipeArray))
+      data.append('ingredients', JSON.stringify(ingredients))
       axios.post('http://localhost:4000/createRecipe', data, {
           headers: {
               'Content-Type': 'multipart/form-data'

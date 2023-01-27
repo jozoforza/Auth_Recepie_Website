@@ -18,14 +18,15 @@ router.post('/signUp',signUpMiddle,passportMiddle, function(req, res) {
     }
 });
 
-router.post('/logout', function(req, res){
-req.logout(function(err) {
-    if (err) { 
-    console.log(err)
-    return next(err); }
-    
-    res.redirect('/');
-});
+router.post('/logout', function(req, res){ 
+    req.logout(function(err) {
+        console.log('logout')
+        if (err) { 
+        console.log(err)
+        return next(err); 
+        }
+    });
+    res.json({message: "you have been logged out"})
 });
 
 router.post('/login',passportMiddle,

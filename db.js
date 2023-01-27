@@ -2,21 +2,27 @@ const uuid = require('uuid').v4
 const sqlite3 = require('sqlite3').verbose();
 
 let db = new sqlite3.Database("./data/main.db", (err) => {
+
     if(err)
     {
     console.log("Error Occurred - " + err.message);
     }else{
         console.log('sqlite connected')
+        db.get("PRAGMA foreign_keys = ON",(err,data)=>{
+            if(err){
+                console.log(err)
+            }
+        })
     }
 })
 
 const recipeQuerry = `INSERT INTO 
-recipes (recipe_id,user_id, name, photo, info, recipe, date, likes, dislikes, ingredients)
- VALUES(?,?,?,?,?,?,DATE(?),?,?,?)`
+recipes (recipe_id,user_id, name, photo, info, recipe, date, ingredients)
+ VALUES(?,?,?,?,?,?,DATE(?),?)`
 function insertRecipe(recipe){
     return new Promise((resolve, reject) => {
         const id = parseInt(uuid(),16)
-        db.run(recipeQuerry ,[recipe.id,recipe.user_id, recipe.name, recipe.photo, recipe.info, JSON.stringify(recipe.recipe),recipe.date,recipe.likes,recipe.dislikes,JSON.stringify(recipe.ingredients) ], (err , data) => {
+        db.run(recipeQuerry ,[recipe.recipe_id,recipe.user_id, recipe.name, recipe.photo, recipe.info, JSON.stringify(recipe.recipe),recipe.date,JSON.stringify(recipe.ingredients) ], (err , data) => {
             if(err){
                 reject(new Error(err))      
             }else{

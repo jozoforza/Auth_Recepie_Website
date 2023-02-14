@@ -1,6 +1,6 @@
 import React from 'react'
 import './css/topBar.css'
-import mainlogo from '../../images/food-svgrepo-com.svg'
+import mainlogo from '../../assets/food-svgrepo-com.svg'
 import SearchBar from './SearchBar'
 import Profile from './Profile'
 

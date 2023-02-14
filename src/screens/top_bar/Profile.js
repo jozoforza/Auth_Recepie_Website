@@ -7,6 +7,7 @@ import {
   selectUser
 } from '../../redux/slicerReducers'
 import axios from 'axios'
+import Avatar from '../minor_components/Avatar'
 
 
 
@@ -25,7 +26,7 @@ const Profile = () => {
   const handleSignOut = async() =>{
    const response = await axios.post('http://localhost:4000/logout')
    console.log(response.data.message)
-   dispatch(fetchUser(null))
+   dispatch(fetchUser({likes: []}))
    navigate('/')
   }
   return (
@@ -37,7 +38,7 @@ const Profile = () => {
       {user && user.username?(
         <div>
           <button onClick={()=> navigate('/profile')}>
-            {user.username}
+            <Avatar size={'20px'} seed={user.profile_pic}/>
           </button>
           <button onClick={()=> handleSignOut()}>
           sign out

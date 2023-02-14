@@ -31,7 +31,7 @@ const LogIn = () => {
         try{
           const response = await axios.post('http://localhost:4000/login', inputs)
           setMessage(response.data.message)
-          if(response.data.password){
+          if(response.data.username){
             navigate('/profile')
             dispatch(fetchUser(response.data))
             console.log(user)

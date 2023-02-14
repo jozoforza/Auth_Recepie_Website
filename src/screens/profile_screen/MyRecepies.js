@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './mainProfileScreen.css'
+import RecipeThumbnail from '../minor_components/RecipeThumbnail'
 
 const MyRecepies = () => {
     const navigate = useNavigate()
@@ -29,13 +30,9 @@ const MyRecepies = () => {
   }else{
     return (
       <div className='recepies'>{myRecipes.map((recipe)=>
-          <div style={{borderStyle: "solid", margin: "1rem"}} key={recipe.recipe_id+"_key"}>
-            <h1>{recipe.name}</h1>
-            <p>{recipe.info}</p>
-            <p>{recipe.date}</p>
-            <div><img src={'http://localhost:4000' + recipe.photo}></img></div>
-            <button onClick={()=>{navigate('/recipe/'+recipe.recipe_id)}}><h1>See recipe</h1></button>
-          </div>)}</div>
+          <RecipeThumbnail recipe={recipe} key={recipe.recipe_id+"_myKey"} setRecipes={setMyRecipes}/>
+          )}
+      </div>
     )
     }
 }

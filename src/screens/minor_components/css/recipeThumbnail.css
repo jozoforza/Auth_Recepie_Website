@@ -1,0 +1,6 @@
+.selectedLike{
+    background-color: cadetblue;
+}
+.notSelectedLike{
+    background-color: rgb(225, 225, 225);
+}

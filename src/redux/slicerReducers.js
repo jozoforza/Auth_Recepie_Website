@@ -3,7 +3,10 @@ import { createSlice } from '@reduxjs/toolkit'
 export const counterSlice = createSlice({
   name: 'user',
   initialState: {
-    value: {}
+    value: {
+      likes: [],
+      user_id: null
+    }
   },
   reducers: {
     incrementByAmount: (state, action) => {
@@ -11,11 +14,21 @@ export const counterSlice = createSlice({
     },
     fetchUser: (state, action) => {
       state.value = action.payload
+    },
+    addLike: (state, action) => {
+      let likeIndex = 0
+      state.value.likes.map((like,index)=>{
+        if(like.recipe_id === action.payload.recipe_id){
+          likeIndex = index
+        }
+      })
+      state.value.likes.splice(likeIndex,1)
+      state.value.likes.push(action.payload)
     }
   }
 })
 
-export const { increment, decrement, incrementByAmount, fetchUser } = counterSlice.actions
+export const { increment, decrement, incrementByAmount, fetchUser, addLike } = counterSlice.actions
 
 export default counterSlice.reducer
 

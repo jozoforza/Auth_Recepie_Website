@@ -19,8 +19,8 @@ const Create = () => {
     //navigation
     const navigate = useNavigate()
     //form info
-    const [recipeArray, setRecipeArray] = useState(["apple"])
-    const [ingredients, setIngredients] = useState(["ingredient"])
+    const [recipeArray, setRecipeArray] = useState([""])
+    const [ingredients, setIngredients] = useState([""])
     let data = new FormData()
     const [inputs, setInputs ] = useState({})
     
@@ -65,7 +65,8 @@ const Create = () => {
         type="text" 
         name="name" 
         value={inputs.name || ""} 
-        onChange={handleChange}/>
+        onChange={handleChange}
+        required/>
 
         <p>info:</p>
 
@@ -73,14 +74,17 @@ const Create = () => {
         type="text" 
         name="info" 
         value={inputs.info || ""} 
-        onChange={handleChange}/>
+        onChange={handleChange}
+        required/>
 
-        <p>photo:</p>
+        <p>photo: <br/> only accept jpg format</p>
 
         <input 
         type="file" 
         name="image" 
-        onChange={handleChange}/>
+        onChange={handleChange}
+        accept='.jpg'
+        required/>
 
         <p>Recipe</p>
 

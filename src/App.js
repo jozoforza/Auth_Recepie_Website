@@ -36,7 +36,8 @@ function App() {
     }
     
   }
-  useEffect(()=>{getUserInfo()},[]) 
+  useEffect(()=>{getUserInfo()
+  },[]) 
 
   return (
     <div className="App">

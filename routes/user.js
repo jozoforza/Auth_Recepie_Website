@@ -1,6 +1,7 @@
-const express = require('express')
+const express = require('express');
+const { dbFind } = require('../db');
 const router = express.Router()
-const {strategy, passportMiddle, signUpMiddle, isLoggedIn} = require('../local_strategy')
+const {strategy, passportMiddle, signUpMiddle, isLoggedIn, addLikesToUser} = require('../local_strategy')
 
 // middleware that is specific to this router
 router.get('/auth',isLoggedIn, function(req, res) {
@@ -8,11 +9,11 @@ router.get('/auth',isLoggedIn, function(req, res) {
   });
   
 router.post('/signUp',signUpMiddle,passportMiddle, function(req, res) {
-    console.log('hit sign up page')
-    console.log(req.body)
     try{
-        console.log(req.user)
-        res.json(req.user);
+        addLikesToUser(req.user).then(user_object=>{
+            console.log(user_object)
+            res.json(user_object)
+        })
     }catch(err){
         console.log(err)
     }
@@ -31,10 +32,11 @@ router.post('/logout', function(req, res){
 
 router.post('/login',passportMiddle,
 function(req, res) {
-    console.log(req.body)
     try{
     console.log(req.user)
-    res.json(req.user);
+    addLikesToUser(req.user).then(user_object=>{
+        res.json(user_object)
+    })
     }catch(err){
     console.log(err)
     }
@@ -42,7 +44,9 @@ function(req, res) {
 );
 router.get('/getProfileInfo', function(req,res){
 if(req.user){
-    res.json(req.user)
+    addLikesToUser(req.user).then(user_object=>{
+        res.json(user_object)
+    })
 }else{
     res.send("u are not auth")
 }

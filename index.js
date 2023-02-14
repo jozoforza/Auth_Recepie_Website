@@ -4,7 +4,7 @@ const session = require('express-session')
 const passport = require('passport')
 const {strategy, passportMiddle, signUpMiddle, isLoggedIn} = require('./local_strategy')
 const app = express();
-const { dbAll, createUser, dbFind, insertRecipe} = require('./db')
+const {dbFind, insertRecipe, dbDel, handlelike, dbUpdate} = require('./db')
 const {sessionConf} = require('./session_config')
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -12,17 +12,6 @@ const date = require('./aditional_functions/get_current_date')
 //routes
 const user = require('./routes/user')
 const recipe = require('./routes/recipe')
-
-/* [id,1, "hamburger", "/data/recipes_pics/adam.jpg",
- "eazy peazy hamburger recipe",
-  JSON.stringify(["get ingredients",
-   "roast meat", "serve with mayo"]),
-   "2022-12-25",20,12,
-   JSON.stringify(["tomato 200mg", "bread 300mg", "meat 300mg"]) ]
-
-   user_id, name, photo, info,
-    recipe, date, likes, dislikes, ingredients
-   */
 
 const recObject = {
   user_id: 2,
@@ -38,15 +27,12 @@ const recObject = {
 /* insertRecipe(recObject).then(()=>{console.log('done')}) */
 passport.use(strategy)
 passport.serializeUser((user, done) => {
-  console.log("serializing user")
   done(null, user.user_id);
 });
 passport.deserializeUser((id, done) => {
-  console.log("deserializing user")
   dbFind('users', 'user_id', id)
   .then(user => done(null, user))
-  .catch(err => console.log(err))
-});
+  .catch(err => console.log(err))});
 
 //middleware
 app.use(cors())
@@ -67,6 +53,6 @@ app.get('/', function(req, res) {
 });
 
 
-app.listen(4000, () => {
+app.listen(process.env.PORT || 4000, () => {
     console.log('Listening on localhost:4000')
   })

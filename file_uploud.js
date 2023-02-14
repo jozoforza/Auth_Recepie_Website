@@ -6,6 +6,10 @@ const storage = multer.diskStorage({
     cb(null, './data/recipes_pics');
   },
   filename: function (req, file, cb) {
+    console.log(req.image)
+    if(!req.image){
+      cb(null, 'noUpload.jpg')
+    }
     cb(null, req.recipeId + path.extname(file.originalname))
   }
 });

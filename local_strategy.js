@@ -54,8 +54,8 @@ function passportMiddle(req, res, next){
 }
 
 function signUpMiddle(req, res, next){
-      dbFind('users','email',req.body.email).then(email => {
-        if(email){
+      dbFind('users','username',req.body.email).then(username => {
+        if(username){
           res.json({message: "user already exist"})
           res.end()
         }else{
@@ -65,7 +65,7 @@ function signUpMiddle(req, res, next){
               email: req.body.email,
               password: hashedPassword,
               username: req.body.username,
-              prof_pic: 'abc',
+              prof_pic: req.body.profile_pic,
               bio: "im a web developer who likes cooking"}).then(
               success => {
                 next()
@@ -75,5 +75,19 @@ function signUpMiddle(req, res, next){
         }
 })           
 }
+  function addLikesToUser(user){
+    return new Promise((resolve, reject) => {
+      dbFind('likes','user_id',user.user_id, false, false, 'all').then(givenLikes=>{
+        resolve({ 
+          user_id: user.user_id,
+          username: user.username,
+          email: user.email,
+          profile_pic: user.profile_pic,
+          bio: user.bio,
+          likes: givenLikes
+        })
+      }).catch(err=>{reject(new Error(err))})   
+    })
+  }
 
-module.exports = {strategy, passportMiddle, signUpMiddle, isLoggedIn}
+module.exports = {strategy, passportMiddle, signUpMiddle, isLoggedIn, addLikesToUser}

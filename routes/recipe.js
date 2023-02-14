@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const {dbFind, dbRecipes, dbMyRecipes, insertRecipe } = require('../db');
+const {dbFind, dbRecipes, dbMyRecipes, insertRecipe, handlelike, getMostLiked} = require('../db');
 const { isLoggedIn } = require('../local_strategy');
 const {upload}  = require('../file_uploud')
 const uuid = require('uuid').v4
@@ -10,7 +10,6 @@ const date = require('../aditional_functions/get_current_date')
 function generateRecipeId(req, res, next){
   const id = parseInt(uuid(),16)
   req.recipeId = id
-  console.log(id)
   next()
 }
 
@@ -20,7 +19,7 @@ router.post('/createRecipe',generateRecipeId,isLoggedIn, upload.single('image'),
     recipe_id: req.recipeId,
     user_id: req.user.user_id,
     name: req.body.name,
-    photo: "/data/recipes_pics/" + req.recipeId + ".jpg",
+    photo: "/data/recipes_pics/" + (req.image?req.recipeId:'noUpload') + ".jpg",
     info: req.body.info,
     recipe: req.body.recipe,
     date: date(),
@@ -28,6 +27,17 @@ router.post('/createRecipe',generateRecipeId,isLoggedIn, upload.single('image'),
   }
   insertRecipe(recipe)
   res.send("file uploaded")
+})
+
+
+router.post('/like/:recipe_id',isLoggedIn,(req,res)=>{
+  handlelike(req.params.recipe_id, req.user.user_id, req.body.like).then((success)=>{
+    if(success){
+      res.json({action: success})
+    }else{
+      res.json({err: "unseccessful"})
+    }
+  })
 })
 
 router.get('/data/recipes_pics/:filename', (req, res) => {
@@ -40,15 +50,17 @@ router.get('/recipe/:id',(req,res)=>{
     })
 })
 router.get('/recipes', (req, res) => {
-    dbRecipes().then((data)=>{
-        res.json(data)
-    })
+    
+    getMostLiked().then((data=>{
+      res.json(data)
+    }))
+
+
   });
-router.get('/myRecipes',(req,res)=>{
+router.get('/myRecipes',isLoggedIn,(req,res)=>{
   if(req.user){
     const myId = req.user.user_id
     dbMyRecipes(myId).then((data)=>{
-      console.log(data)
       res.json(data)
     })
   }else{
